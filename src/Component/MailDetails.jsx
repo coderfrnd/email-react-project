@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const MailDetails = ({ body, id, isFav, name, date, subject, isFavorite }) => {
   const htmlString = body;
@@ -18,7 +18,10 @@ const MailDetails = ({ body, id, isFav, name, date, subject, isFavorite }) => {
   if (htmlString) {
     bodyMessage = removeHtmlTags();
   }
-  const [favoriteButtonSwitch, setfavoriteButtonSwitch] = useState(isFavorite);
+  const [favoriteButtonSwitch, setfavoriteButtonSwitch] = useState(false);
+  useEffect(() => {
+    setfavoriteButtonSwitch(isFavorite);
+  }, [id]);
 
   return (
     <div className="bg-white border w-[88%]  m-8 mt-5 border-[#CFD2DC] rounded-[8px]  shadow-md">
@@ -39,7 +42,7 @@ const MailDetails = ({ body, id, isFav, name, date, subject, isFavorite }) => {
             setfavoriteButtonSwitch(!favoriteButtonSwitch);
           }}
         >
-          {favoriteButtonSwitch ? "Remove from Favorites" : "Marks as favorite"}
+          {favoriteButtonSwitch ? "Remove from Fav" : "Marks as favorite"}
         </button>
       </section>
       <span className="mb-6 pl-[120px] block text-[#636363] font-[500] text-[15px] ">

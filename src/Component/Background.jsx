@@ -10,7 +10,9 @@ const UnRead = ({ sideBar, mailPreview, openSideBar, bodyMail, addIsFav }) => {
         {
           <div
             className={`${
-              sideBar ? "grid grid-cols-[40%_60%]" : "h-screen w-full"
+              sideBar
+                ? "grid grid-cols-[40%_60%] pl-11 "
+                : "h-screen w-full pl-11"
             }`}
           >
             {mailPreview.length > 0 ? (

@@ -11,9 +11,7 @@ const CombineCardAndDetails = ({
     <>
       <div
         className={` ${
-          sideBar
-            ? "h-screen overflow-scroll"
-            : "justify-center items-center p-1"
+          sideBar ? "h-screen overflow-scroll" : "justify-center  p-1"
         } flex flex-col p-1 cursor-pointer `}
       >
         {mailPreview.map((ele, ind) => (

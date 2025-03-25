@@ -12,8 +12,6 @@ const MailCard = ({
   activeId,
 }) => {
   let { email } = from;
-  // console.log(activeId, "haa");
-
   const timestamp = date;
   const formattedDate = new Date(timestamp).toLocaleString("en-GB", {
     day: "2-digit",
@@ -25,7 +23,7 @@ const MailCard = ({
   });
   return (
     <div
-      className={`w-[90%] p-3 pl-5 border-[1px] border-[#CFD2DC] rounded-[5px] flex m-4  ${
+      className={`w-[90%] p-3 pl-6 border-[1px] border-[#CFD2DC] rounded-[5px] flex m-4  ${
         read ? "bg-[#F2F2F2]" : "bg-white"
       } ${activeId ? "border-[#E54065]" : ""} `}
       onClick={(e) => {
