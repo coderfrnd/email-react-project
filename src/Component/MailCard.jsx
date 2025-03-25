@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
-const MailCard = ({ short_description, from, subject, date }) => {
+const MailCard = ({
+  short_description,
+  from,
+  subject,
+  date,
+  openSideBar,
+  id,
+  read,
+  isFav,
+  activeId,
+}) => {
   let { email } = from;
+  // console.log(activeId, "haa");
+
   const timestamp = date;
   const formattedDate = new Date(timestamp).toLocaleString("en-GB", {
     day: "2-digit",
@@ -11,21 +23,40 @@ const MailCard = ({ short_description, from, subject, date }) => {
     minute: "2-digit",
     hour12: true,
   });
-  // console.log(formattedDate);
   return (
-    <div className="w-[90%] p-6 bg-[#F2F2F2] border rounded-[5px] flex space-x-8 m-4">
-      <div className="bg-[#E54065] h-16 w-16 rounded-full"></div>
-      <div className="mail-part">
-        <header className="p-2">
-          <span>From:</span>
+    <div
+      className={`w-[90%] p-3 pl-5 border-[1px] border-[#CFD2DC] rounded-[5px] flex m-4  ${
+        read ? "bg-[#F2F2F2]" : "bg-white"
+      } ${activeId ? "border-[#E54065]" : ""} `}
+      onClick={(e) => {
+        openSideBar(id);
+      }}
+    >
+      <div className="bg-[#E54065]  h-14 w-14 rounded-full text-center text-white flex justify-center items-center font-bold text-2xl aspect-square">
+        <span>{email[0].toUpperCase()}</span>
+      </div>
+      <div className="mail-part pl-6 text-[#636363]">
+        <header className="p-1 text-[16px] ">
+          <span>From: </span>
           <strong>{email}</strong>
         </header>
-        <div className="p-2">
-          <span>Subject:</span>
+        <div className="p-1 pt-[1px] text-[16px] ">
+          <span>Subject: </span>
           <strong>{subject}</strong>
         </div>
-        <p>{short_description}</p>
-        <span>{formattedDate}</span>
+        <p className="line-clamp-1 p-1 pt-2 text-[16px]">
+          {short_description}...
+        </p>
+        <article className="space-x-8">
+          <span className="p-1 pt-2 text-[14px]">{formattedDate}</span>
+          {isFav ? (
+            <span className="text-[#E54065] font-bold text-[14px]">
+              Favorite
+            </span>
+          ) : (
+            ""
+          )}
+        </article>
       </div>
     </div>
   );
