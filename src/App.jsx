@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from "react";
 import Navbar from "./Component/Navbar";
 import BackGround from "./Component/Background";
+import NoMail from "./Component/NoMail";
 
 const App = () => {
   const [mailPreview, setMailPreview] = useState([]);
@@ -102,7 +103,7 @@ const App = () => {
             addIsFav={addIsFav}
           />
         ) : (
-          ""
+          <NoMail />
         )}
       </div>
     </>
