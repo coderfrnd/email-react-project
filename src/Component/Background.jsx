@@ -1,38 +1,42 @@
 import React from "react";
 import MailDetails from "./MailDetails";
-import CombineCardAndDetails from "./sideBarComponent.jsx/CombineCardAndDetails";
+import CombineCardAndDetails from "./CombineCardAndDetails";
 
-const UnRead = ({ sideBar, mailPreview, openSideBar, bodyMail, addIsFav }) => {
+const BackGround = ({
+  sideBar,
+  mailPreview,
+  openSideBar,
+  bodyMail,
+  addIsFav,
+}) => {
   let { id } = bodyMail;
   return (
     <>
-      <>
-        {
-          <div
-            className={`${
-              sideBar
-                ? "grid grid-cols-[40%_60%] pl-11 "
-                : "h-screen w-full pl-11"
-            }`}
-          >
-            {mailPreview.length > 0 ? (
-              <>
-                <CombineCardAndDetails
-                  mailPreview={mailPreview}
-                  sideBar={sideBar}
-                  openSideBar={openSideBar}
-                  activeId={id}
-                />
-                {sideBar ? <MailDetails {...bodyMail} isFav={addIsFav} /> : ""}
-              </>
-            ) : (
-              "Loading"
-            )}
-          </div>
-        }
-      </>
+      {
+        <div
+          className={`${
+            sideBar
+              ? "grid grid-cols-[40%_60%] pl-11 "
+              : "h-screen w-full pl-11"
+          }`}
+        >
+          {mailPreview.length > 0 ? (
+            <>
+              <CombineCardAndDetails
+                mailPreview={mailPreview}
+                sideBar={sideBar}
+                openSideBar={openSideBar}
+                activeId={id}
+              />
+              {sideBar ? <MailDetails {...bodyMail} isFav={addIsFav} /> : ""}
+            </>
+          ) : (
+            "Loading"
+          )}
+        </div>
+      }
     </>
   );
 };
 
-export default UnRead;
+export default BackGround;

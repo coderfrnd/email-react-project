@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 const MailCard = ({
   short_description,
@@ -12,8 +12,8 @@ const MailCard = ({
   activeId,
 }) => {
   let { email } = from;
-  const timestamp = date;
-  const formattedDate = new Date(timestamp).toLocaleString("en-GB", {
+  const timeStamp = date;
+  const formattedDate = new Date(timeStamp).toLocaleString("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

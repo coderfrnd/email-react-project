@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import MailCard from "../MailCard";
-// MailCard
+import MailCard from "./MailCard";
 const CombineCardAndDetails = ({
   mailPreview,
   openSideBar,

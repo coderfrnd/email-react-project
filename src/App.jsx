@@ -1,50 +1,58 @@
 import React, { createContext, useEffect, useState } from "react";
 import Navbar from "./Component/Navbar";
-import UnRead from "./Component/Background";
+import BackGround from "./Component/Background";
 
 const App = () => {
   const [mailPreview, setMailPreview] = useState([]);
   const [originalMailPreview, setOriginalMailPreview] = useState([]);
-  const [sideBar, setsideBar] = useState(false);
+  const [sideBar, setSideBar] = useState(false);
   const [bodyMail, setBodyMail] = useState([]);
 
   useEffect(() => {
     async function getMailIdAndMessage() {
-      let response = await fetch(`https://flipkart-email-mock.vercel.app/`);
-      let data = await response.json();
-      let addFavAndRead = data.list.map((ele) => ({
-        ...ele,
-        isFav: false,
-        read: false,
-      }));
-      setMailPreview([...addFavAndRead]);
-      setOriginalMailPreview([...addFavAndRead]);
+      try {
+        let response = await fetch(`https://flipkart-email-mock.vercel.app/`);
+        let data = await response.json();
+        let addFavAndRead = data.list.map((ele) => ({
+          ...ele,
+          isFav: false,
+          read: false,
+        }));
+        setMailPreview([...addFavAndRead]);
+        setOriginalMailPreview([...addFavAndRead]);
+      } catch (error) {
+        console.log("Erron in Mail Getting Short Description Mail", error);
+      }
     }
     getMailIdAndMessage();
   }, []);
 
   async function getMailFullMessageWithId(id) {
-    let response = await fetch(
-      `https://flipkart-email-mock.vercel.app/?id=${id}`
-    );
-    let data = await response.json();
-    let changePreviewData = originalMailPreview.map((ele) =>
-      ele.id === id ? { ...ele, read: true } : ele
-    );
-    setOriginalMailPreview([...changePreviewData]);
-    setMailPreview([...changePreviewData]);
-    setBodyMail({
-      ...data,
-      name: originalMailPreview[id].from.name,
-      date: originalMailPreview[id].date,
-      subject: originalMailPreview[id].subject,
-      isFavorite: originalMailPreview[id].isFav,
-    });
+    try {
+      let response = await fetch(
+        `https://flipkart-email-mock.vercel.app/?id=${id}`
+      );
+      let data = await response.json();
+      let changePreviewData = originalMailPreview.map((ele) =>
+        ele.id === id ? { ...ele, read: true } : ele
+      );
+      setOriginalMailPreview([...changePreviewData]);
+      setMailPreview([...changePreviewData]);
+      setBodyMail({
+        ...data,
+        name: originalMailPreview[id].from.name,
+        date: originalMailPreview[id].date,
+        subject: originalMailPreview[id].subject,
+        isFavorite: originalMailPreview[id].isFav,
+      });
+    } catch (error) {
+      console.log("Errors in Full Mail Message Id", error);
+    }
   }
 
   function openSideBar(id) {
     if (!sideBar) {
-      setsideBar(true);
+      setSideBar(true);
     }
     if (id) getMailFullMessageWithId(id);
   }
@@ -86,7 +94,7 @@ const App = () => {
       <div className="w-full h-full bg-[#F4F5F9] ">
         <Navbar handleButtonClick={handleButtonClick} />
         {mailPreview.length > 0 ? (
-          <UnRead
+          <BackGround
             mailPreview={mailPreview}
             bodyMail={bodyMail}
             sideBar={sideBar}
