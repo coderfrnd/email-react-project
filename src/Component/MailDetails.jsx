@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const MailDetails = ({
-  body,
-  id,
-  isFav,
-  date,
-  subject,
-  isFavorite,
-  name,
-  email,
-}) => {
+const MailDetails = ({ body, id, isFav, date, subject, isFavorite, email }) => {
   const htmlString = body;
   let bodyMessage;
   const timestamp = date;
@@ -28,10 +19,11 @@ const MailDetails = ({
     bodyMessage = removeHtmlTags();
   }
   const [favoriteButtonSwitch, setfavoriteButtonSwitch] = useState(false);
+  // console.log(isFavorite, "from mail details");
+
   useEffect(() => {
     setfavoriteButtonSwitch(isFavorite);
-  }, [id]);
-
+  }, [id, isFavorite]);
   return (
     <div className="bg-white border w-[88%]  m-8 mt-5 border-[#CFD2DC] rounded-[8px]  shadow-md">
       <section className="upper-Section flex p-8 pb-0 justify-between pr-[60px]">

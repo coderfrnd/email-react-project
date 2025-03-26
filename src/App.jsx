@@ -4,7 +4,6 @@ import BackGround from "./Component/Background";
 import NoMail from "./Component/NoMail";
 
 const App = () => {
-  const [mailPreview, setMailPreview] = useState([]);
   const [originalMailPreview, setOriginalMailPreview] = useState([]);
   const [sideBar, setSideBar] = useState(false);
   const [bodyMail, setBodyMail] = useState([]);
@@ -20,7 +19,6 @@ const App = () => {
           isFav: false,
           read: false,
         }));
-        setMailPreview([...addFavAndRead]);
         setOriginalMailPreview([...addFavAndRead]);
       } catch (error) {
         console.log("Erron in Mail Getting Short Description Mail", error);
@@ -28,7 +26,6 @@ const App = () => {
     }
     getMailIdAndMessage();
   }, []);
-
   async function getMailFullMessageWithId(id) {
     try {
       let response = await fetch(
@@ -39,11 +36,6 @@ const App = () => {
         ele.id === id ? { ...ele, read: true } : ele
       );
       setOriginalMailPreview([...changePreviewData]);
-      if (mailPreview.every((ele) => !ele.read)) {
-        setMailPreview(changePreviewData.filter((ele) => !ele.read));
-      } else {
-        setMailPreview(filterActiveStatus(activeFilter));
-      }
       let selectedMail = changePreviewData.find((ele) => ele.id === id);
       setBodyMail({
         ...data,
@@ -52,22 +44,16 @@ const App = () => {
         subject: selectedMail.subject,
         isFavorite: selectedMail.isFav,
       });
-      // handleButtonClick();
     } catch (error) {
       console.log("Errors in Full Mail Message Id", error);
     }
   }
-
   function openSideBar(id) {
     if (!sideBar) {
       setSideBar(true);
     }
     if (id) getMailFullMessageWithId(id);
   }
-  // useEffect(() => {
-  //   handleButtonClick(activeFilter);
-  // }, [originalMailPreview]);
-
   function filterActiveStatus(btnStatus) {
     let arr = [];
     if (btnStatus === "Read") {
@@ -82,10 +68,9 @@ const App = () => {
     }
     return arr;
   }
-
   function handleButtonClick(btnStatus) {
     setActiveFilter(btnStatus);
-    setMailPreview(filterActiveStatus(btnStatus));
+    setSideBar(false);
   }
   function addIsFav(id) {
     let changePreviewData = originalMailPreview.map((ele) => {
@@ -97,22 +82,27 @@ const App = () => {
       return ele;
     });
     setOriginalMailPreview(changePreviewData);
-    setMailPreview(filterActiveStatus(activeFilter));
-    setBodyMail({
-      ...bodyMail,
-      name: originalMailPreview[id].from.name,
-      date: originalMailPreview[id].date,
-      subject: originalMailPreview[id].subject,
-      isFavorite: originalMailPreview[id].isFav,
-    });
+    // console.log(originalMailPreview == filterActiveStatus(activeFilter));
+    // setMailPreview(filterActiveStatus(activeFilter));
+    let updatedMail = changePreviewData.find((ele) => ele.id === id);
+    if (updatedMail) {
+      setBodyMail((prevBodyMail) => ({
+        ...prevBodyMail,
+        name: updatedMail.from.name,
+        date: updatedMail.date,
+        subject: updatedMail.subject,
+        isFavorite: updatedMail.isFav,
+      }));
+      // console.log(bodyMail);
+    }
   }
   return (
     <>
       <div className="w-full h-full bg-[#F4F5F9] ">
         <Navbar handleButtonClick={handleButtonClick} />
-        {mailPreview.length > 0 ? (
+        {filterActiveStatus(activeFilter).length > 0 ? (
           <BackGround
-            mailPreview={mailPreview}
+            mailPreview={filterActiveStatus(activeFilter)}
             bodyMail={bodyMail}
             sideBar={sideBar}
             openSideBar={openSideBar}
