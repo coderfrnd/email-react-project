@@ -10,6 +10,13 @@ const BackGround = ({
   addIsFav,
 }) => {
   let { id } = bodyMail;
+  let email;
+  mailPreview.map((ele) => {
+    if (ele.id == id) {
+      email = ele.from.email;
+    }
+  });
+
   return (
     <>
       {
@@ -28,7 +35,11 @@ const BackGround = ({
                 openSideBar={openSideBar}
                 activeId={id}
               />
-              {sideBar ? <MailDetails {...bodyMail} isFav={addIsFav} /> : ""}
+              {sideBar ? (
+                <MailDetails {...bodyMail} isFav={addIsFav} email={email} />
+              ) : (
+                ""
+              )}
             </>
           ) : (
             "Loading"

@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 
-const MailDetails = ({ body, id, isFav, name, date, subject, isFavorite }) => {
+const MailDetails = ({
+  body,
+  id,
+  isFav,
+  date,
+  subject,
+  isFavorite,
+  name,
+  email,
+}) => {
   const htmlString = body;
   let bodyMessage;
   const timestamp = date;
@@ -28,7 +37,7 @@ const MailDetails = ({ body, id, isFav, name, date, subject, isFavorite }) => {
       <section className="upper-Section flex p-8 pb-0 justify-between pr-[60px]">
         <div className="flex  space-x-6">
           <div className="bg-[#E54065] h-14 w-14 rounded-full text-center text-white flex justify-center items-center font-bold text-2xl ">
-            <span> {name ? name[0].toUpperCase() : ""}</span>
+            <span> {email ? email[0].toUpperCase() : "Y"}</span>
           </div>
           <h1 className="text-3xl font-bold text-center  text-[#636363]">
             {subject ? subject : ""}

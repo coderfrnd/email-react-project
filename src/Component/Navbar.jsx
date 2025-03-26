@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const Navbar = ({ handleButtonClick }) => {
-  const [activeFilter, setActiveFilter] = useState("");
+  const [activeFilter, setActiveFilter] = useState("Unread");
 
   const handleClick = (filter) => {
     setActiveFilter(filter);

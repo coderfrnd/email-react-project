@@ -34,11 +34,11 @@ const App = () => {
         `https://flipkart-email-mock.vercel.app/?id=${id}`
       );
       let data = await response.json();
+      setMailPreview(originalMailPreview.filter((ele) => !ele.read));
       let changePreviewData = originalMailPreview.map((ele) =>
         ele.id === id ? { ...ele, read: true } : ele
       );
       setOriginalMailPreview([...changePreviewData]);
-      setMailPreview([...changePreviewData]);
       setBodyMail({
         ...data,
         name: originalMailPreview[id].from.name,
@@ -46,6 +46,7 @@ const App = () => {
         subject: originalMailPreview[id].subject,
         isFavorite: originalMailPreview[id].isFav,
       });
+      console.log(id, data);
     } catch (error) {
       console.log("Errors in Full Mail Message Id", error);
     }
