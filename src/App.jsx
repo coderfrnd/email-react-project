@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import Navbar from "./Component/Navbar";
 import BackGround from "./Component/Background";
 import NoMail from "./Component/NoMail";
@@ -8,6 +8,7 @@ const App = () => {
   const [originalMailPreview, setOriginalMailPreview] = useState([]);
   const [sideBar, setSideBar] = useState(false);
   const [bodyMail, setBodyMail] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("All");
 
   useEffect(() => {
     async function getMailIdAndMessage() {
@@ -34,19 +35,24 @@ const App = () => {
         `https://flipkart-email-mock.vercel.app/?id=${id}`
       );
       let data = await response.json();
-      setMailPreview(originalMailPreview.filter((ele) => !ele.read));
       let changePreviewData = originalMailPreview.map((ele) =>
         ele.id === id ? { ...ele, read: true } : ele
       );
       setOriginalMailPreview([...changePreviewData]);
+      if (mailPreview.every((ele) => !ele.read)) {
+        setMailPreview(changePreviewData.filter((ele) => !ele.read));
+      } else {
+        setMailPreview(filterActiveStatus(activeFilter));
+      }
+      let selectedMail = changePreviewData.find((ele) => ele.id === id);
       setBodyMail({
         ...data,
-        name: originalMailPreview[id].from.name,
-        date: originalMailPreview[id].date,
-        subject: originalMailPreview[id].subject,
-        isFavorite: originalMailPreview[id].isFav,
+        name: selectedMail.from.name,
+        date: selectedMail.date,
+        subject: selectedMail.subject,
+        isFavorite: selectedMail.isFav,
       });
-      console.log(id, data);
+      // handleButtonClick();
     } catch (error) {
       console.log("Errors in Full Mail Message Id", error);
     }
@@ -58,7 +64,11 @@ const App = () => {
     }
     if (id) getMailFullMessageWithId(id);
   }
-  function handleButtonClick(btnStatus) {
+  // useEffect(() => {
+  //   handleButtonClick(activeFilter);
+  // }, [originalMailPreview]);
+
+  function filterActiveStatus(btnStatus) {
     let arr = [];
     if (btnStatus === "Read") {
       arr = originalMailPreview.filter((ele) => ele.read === true);
@@ -70,7 +80,12 @@ const App = () => {
     } else {
       arr = [...originalMailPreview];
     }
-    setMailPreview([...arr]);
+    return arr;
+  }
+
+  function handleButtonClick(btnStatus) {
+    setActiveFilter(btnStatus);
+    setMailPreview(filterActiveStatus(btnStatus));
   }
   function addIsFav(id) {
     let changePreviewData = originalMailPreview.map((ele) => {
@@ -82,7 +97,7 @@ const App = () => {
       return ele;
     });
     setOriginalMailPreview(changePreviewData);
-    setMailPreview([...changePreviewData]);
+    setMailPreview(filterActiveStatus(activeFilter));
     setBodyMail({
       ...bodyMail,
       name: originalMailPreview[id].from.name,
