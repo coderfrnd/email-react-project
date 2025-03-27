@@ -19,13 +19,11 @@ const MailDetails = ({ body, id, isFav, date, subject, isFavorite, email }) => {
     bodyMessage = removeHtmlTags();
   }
   const [favoriteButtonSwitch, setfavoriteButtonSwitch] = useState(false);
-  // console.log(isFavorite, "from mail details");
-
   useEffect(() => {
     setfavoriteButtonSwitch(isFavorite);
   }, [id, isFavorite]);
   return (
-    <div className="bg-white border w-[88%]  m-8 mt-5 border-[#CFD2DC] rounded-[8px]  shadow-md">
+    <aside className="bg-white border w-[88%]  m-8 mt-5 border-[#CFD2DC] rounded-[8px]  shadow-md">
       <section className="upper-Section flex p-8 pb-0 justify-between pr-[60px]">
         <div className="flex  space-x-6">
           <div className="bg-[#E54065] h-14 w-14 rounded-full text-center text-white flex justify-center items-center font-bold text-2xl ">
@@ -35,7 +33,6 @@ const MailDetails = ({ body, id, isFav, date, subject, isFavorite, email }) => {
             {subject ? subject : ""}
           </h1>
         </div>
-
         <button
           className="bg-[#E54065] h-10 text-white font-bold cursor-pointer w-46 rounded-full"
           onClick={(e) => {
@@ -50,12 +47,12 @@ const MailDetails = ({ body, id, isFav, date, subject, isFavorite, email }) => {
         {formattedDate}
       </span>
       <div className="message  pl-[120px] pr-[60px]">
-        <p
+        <article
           className="text-[15px] text-[#636363] leading-relaxed text-justify font-medium "
           dangerouslySetInnerHTML={{ __html: bodyMessage }}
         />
       </div>
-    </div>
+    </aside>
   );
 };
 

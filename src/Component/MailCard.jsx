@@ -42,10 +42,10 @@ const MailCard = ({
           <span>Subject: </span>
           <strong>{subject}</strong>
         </div>
-        <p className="line-clamp-1 p-1 pt-2 text-[16px]">
+        <article className="line-clamp-1 p-1 pt-2 text-[16px]">
           {short_description}...
-        </p>
-        <article className="space-x-8">
+        </article>
+        <footer className="space-x-10">
           <span className="p-1 pt-2 text-[14px]">{formattedDate}</span>
           {isFav ? (
             <span className="text-[#E54065] font-bold text-[14px]">
@@ -54,7 +54,7 @@ const MailCard = ({
           ) : (
             ""
           )}
-        </article>
+        </footer>
       </div>
     </div>
   );

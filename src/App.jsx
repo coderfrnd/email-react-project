@@ -2,57 +2,29 @@ import React, { createContext, useEffect, useRef, useState } from "react";
 import Navbar from "./Component/Navbar";
 import BackGround from "./Component/Background";
 import NoMail from "./Component/NoMail";
+import getMailIdAndMessage from "./Component/FetchShrortDescMail";
+import getMailFullMessageWithId from "./Component/FetchFullMail";
 
 const App = () => {
   const [originalMailPreview, setOriginalMailPreview] = useState([]);
   const [sideBar, setSideBar] = useState(false);
   const [bodyMail, setBodyMail] = useState([]);
   const [activeFilter, setActiveFilter] = useState("All");
-
   useEffect(() => {
-    async function getMailIdAndMessage() {
-      try {
-        let response = await fetch(`https://flipkart-email-mock.vercel.app/`);
-        let data = await response.json();
-        let addFavAndRead = data.list.map((ele) => ({
-          ...ele,
-          isFav: false,
-          read: false,
-        }));
-        setOriginalMailPreview([...addFavAndRead]);
-      } catch (error) {
-        console.log("Erron in Mail Getting Short Description Mail", error);
-      }
-    }
-    getMailIdAndMessage();
+    getMailIdAndMessage(setOriginalMailPreview);
   }, []);
-  async function getMailFullMessageWithId(id) {
-    try {
-      let response = await fetch(
-        `https://flipkart-email-mock.vercel.app/?id=${id}`
-      );
-      let data = await response.json();
-      let changePreviewData = originalMailPreview.map((ele) =>
-        ele.id === id ? { ...ele, read: true } : ele
-      );
-      setOriginalMailPreview([...changePreviewData]);
-      let selectedMail = changePreviewData.find((ele) => ele.id === id);
-      setBodyMail({
-        ...data,
-        name: selectedMail.from.name,
-        date: selectedMail.date,
-        subject: selectedMail.subject,
-        isFavorite: selectedMail.isFav,
-      });
-    } catch (error) {
-      console.log("Errors in Full Mail Message Id", error);
-    }
-  }
-  function openSideBar(id) {
+
+  async function openSideBar(id) {
     if (!sideBar) {
       setSideBar(true);
     }
-    if (id) getMailFullMessageWithId(id);
+    if (id)
+      await getMailFullMessageWithId(
+        id,
+        setOriginalMailPreview,
+        setBodyMail,
+        originalMailPreview
+      );
   }
   function filterActiveStatus(btnStatus) {
     let arr = [];
@@ -61,14 +33,21 @@ const App = () => {
     } else if (btnStatus === "Favorites") {
       arr = originalMailPreview.filter((ele) => ele.isFav === true);
     } else if (btnStatus === "Unread") {
-      console.log(originalMailPreview);
-      arr = originalMailPreview.filter((ele) => ele.read === false);
+      console.log("Filtering Unread Emails...");
+      arr = originalMailPreview.filter((ele) => {
+        if (ele.read == ele.tempRead) {
+          return ele;
+        }
+      });
     } else {
       arr = [...originalMailPreview];
     }
     return arr;
   }
   function handleButtonClick(btnStatus) {
+    setOriginalMailPreview((prevMails) => {
+      return prevMails.map((ele) => ({ ...ele, tempRead: false }));
+    });
     setActiveFilter(btnStatus);
     setSideBar(false);
   }
@@ -115,5 +94,4 @@ const App = () => {
     </>
   );
 };
-
 export default App;
